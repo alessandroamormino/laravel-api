@@ -13,7 +13,9 @@ class ProjectController extends Controller
         // $projects = Project::all();
 
         // leggo anche le tabelle collegate ai progetti
-        $projects = Project::with('type', 'technologies')->orderBy('projects.created_at', 'desc')->get();
+        // $projects = Project::with('type', 'technologies')->orderBy('projects.created_at', 'desc')->get();
+
+        $projects = Project::with('type', 'technologies')->orderBy('projects.created_at', 'desc')->paginate(6);
 
         return response()->json([
             'success' => true,
