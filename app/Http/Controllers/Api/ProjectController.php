@@ -10,7 +10,10 @@ class ProjectController extends Controller
 {
     public function index(){
         // prendo tutti i progetti
-        $projects = Project::all();
+        // $projects = Project::all();
+
+        // leggo anche le tabelle collegate ai progetti
+        $projects = Project::with('type', 'technologies')->orderBy('projects.created_at', 'desc')->get();
 
         return response()->json([
             'success' => true,
