@@ -22,3 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Creo rotta per gestire la mia chiamata API 
 // questa rotta produrrà un file json che leggerò dal front-office
 Route::get('projects', [ProjectController::class, 'index']);
+
+// Creo una rotta per gestire la chiamata API che mandi il dettaglio del singolo progetto al front-office
+Route::get('projects/{slug}', [ProjectController::class, 'show']);
