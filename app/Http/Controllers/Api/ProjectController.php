@@ -31,7 +31,7 @@ class ProjectController extends Controller
         if($project){
             return response()->json([
                 'success' => true,
-                'project' => $project,
+                'result' => $project,
             ]);
         } else{
             // altrimenti mando un messaggio di errore che gestirò dal front end
