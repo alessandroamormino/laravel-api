@@ -25,7 +25,7 @@ class ProjectController extends Controller
 
     public function show($slug){
         // prelevo i dati dal modello cercando solo lo slug che mi interessa
-        $project = Project::where('slug', $slug)->first();
+        $project = Project::where('slug', $slug)->with('type', 'technologies')->first();
 
         // se ottengo effettivamente un post dal front end con quello slug allora lo mando
         if($project){
