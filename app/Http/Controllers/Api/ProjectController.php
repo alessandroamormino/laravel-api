@@ -4,23 +4,43 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\Type;
 use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
-    public function index(){
-        // prendo tutti i progetti
-        // $projects = Project::all();
+    public function index(Request $request){
 
-        // leggo anche le tabelle collegate ai progetti
-        // $projects = Project::with('type', 'technologies')->orderBy('projects.created_at', 'desc')->get();
+    // $projects = Project::with('type', 'technologies')->orderBy('projects.created_at', 'desc')->paginate(8);
 
-        $projects = Project::with('type', 'technologies')->orderBy('projects.created_at', 'desc')->paginate(8);
+      $requestData = $request->all();
 
-        return response()->json([
-            'success' => true,
-            'results' => $projects
-        ]);
+      $types = Type::all();
+
+      // controllo se è stata selezionata una tipologia di progetto
+      if($request->has('type_id') && $requestData['type_id']){
+      $projects = Project::where('type_id', $requestData['type_id'])
+        ->with('type', 'technologies')
+        ->orderBy('projects.created_at', 'desc')
+        ->paginate(8);
+
+        // controllo se la chiamata non da nessun risultato
+        if(count($projects) == 0){
+          return response()->json([
+            'success' => false,
+            'error' => 'No project made with this type.',
+          ]);
+        }
+        
+      } else{
+        $projects = Project::with('type', 'technologies')->orderBy('projects.created_at', 'desc')->paginate(8); 
+      }
+
+      return response()->json([
+          'success' => true,
+          'results' => $projects,
+          'allTypes' => $types,
+      ]);
     }
 
     public function show($slug){
